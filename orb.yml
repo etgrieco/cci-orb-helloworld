@@ -5,24 +5,18 @@ display:
   home_url: https://github.com/etgrieco
   source_url: https://github.com/etgrieco/cci-orb-helloworld
 
+executors:
+  default:
+    docker:
+      - image: circleci/alpine
 
-orbs:
-  my-hello-world:
-    orbs: # list of other orbs I may reference
-    executors:
-      alpineexecutor:
-        docker:
-          - image: circleci/alpine
-    commands:
-      sayhellotomyfriend:
-        steps:
-          - run: echo "Hello, << parameters.friend >>!"
-        parameters:
-          friend:
-            type: string
-            default: my friend
-    jobs:
-      greet:
-        executor: alpineexecutor
-        steps:
-          - my-hello-world
+commands:
+  sayhellotomyfriend:
+    description: If you want to make a nice greeting
+    parameters:
+      friend:
+        type: string
+        description: A name of the friend to greet
+        default: my friend
+    steps:
+      - run: echo "Hello, << parameters.friend >>!"
