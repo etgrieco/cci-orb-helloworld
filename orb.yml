@@ -1,4 +1,6 @@
 python_script: &python_script |
+  cat \<< EOF | python
+  # BEGIN PYTHON SCRIPT
   import json
   import os
   import urllib.request
@@ -219,6 +221,8 @@ python_script: &python_script |
       }
 
   main()
+  # END PYTHON SCRIPT
+  EOF
 
 version: 2.1
 description: A sample hello world orb
