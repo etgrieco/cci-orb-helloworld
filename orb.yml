@@ -1,14 +1,25 @@
+python_script: &python_script |
+  cat \<< EOF | python
+  # BEGIN PYTHON SCRIPT
+  import requests
+
+  def main():
+      print('hello world')
+
+      res = requests.get('http://www.example.com')
+
+      print(res.content)
+
+  main()
+  # END PYTHON SCRIPT
+  EOF
+
 version: 2.1
 description: A sample hello world orb
 
 display:
   home_url: https://github.com/etgrieco
   source_url: https://github.com/etgrieco/cci-orb-helloworld
-
-executors:
-  default:
-    docker:
-      - image: circleci/node:lts
 
 commands:
   sayhellotomyfriend:
@@ -20,3 +31,16 @@ commands:
         default: my friend
     steps:
       - run: echo "Hello, << parameters.friend >>!"
+ 
+jobs:
+  pyscript:
+    docker:
+      - image: circleci/python:latest
+    steps:
+      - run:
+          name: Install python dependencies
+          command: pip install requests
+      - run:
+          name: Run monitor script
+          command: *python_script
+
