@@ -31,7 +31,7 @@ commands:
         default: my friend
     steps:
       - run: echo "Hello, << parameters.friend >>!"
- 
+
 jobs:
   pyscript:
     docker:
@@ -41,6 +41,12 @@ jobs:
           name: Install python dependencies
           command: pip install requests
       - run:
+          name: Show env var
+          command: echo "${<< parameters.test-env >>}"
+      - run:
           name: Run monitor script
           command: *python_script
-
+    parameters:
+      test-env:
+        type: env_var_name
+        default: TEST_VAR
