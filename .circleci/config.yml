@@ -1,21 +1,35 @@
+python_script: &python_script |
+  cat \<< EOF | python
+  # BEGIN PYTHON SCRIPT
+  import requests
+
+  def main():
+      print('hello world')
+
+      res = requests.get('http://www.example.com')
+
+      print(res.content)
+
+  main()
+  # END PYTHON SCRIPT
+  EOF
+
 version: 2.1
 
 jobs:
   build:
     docker:
       - image: circleci/python:latest
-    working_directory: ~/app/
     steps:
-      - checkout
       - run:
           name: Install python dependencies
           command: pip install requests
       - run:
           name: Run monitor script
-          command: python ~/app/app.test.py
+          command: *python_script
 
 workflows:
-  test-orb:
+  build:
     # triggers:
     #   - schedule:
     #       cron: 5,10,15,20,25,30,35,40,45,50,55 * * * *
