@@ -1,14 +1,18 @@
 version: 2.1
 
-orbs:
-  hello: etgrieco/hello-world@dev:0.0.1
-
 jobs:
   build:
-    executor: hello/default
+    docker:
+      - image: circleci/python:latest
+    working_directory: ~/app/
     steps:
-      - hello/sayhellotomyfriend:
-          friend: Anna
+      - checkout
+      - run:
+          name: Install python dependencies
+          command: pip install requests
+      - run:
+          name: Run monitor script
+          command: python ~/app/app.test.py
 
 workflows:
   test-orb:
