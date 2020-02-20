@@ -1,14 +1,29 @@
 python_script: &python_script |
   cat \<< EOF | python
   # BEGIN PYTHON SCRIPT
-  import requests
+  import os
 
   def main():
-      print('hello world')
+      vcs = 'gh'
+      org = os.getenv('CIRCLE_PROJECT_USERNAME')
+      repo = os.getenv('CIRCLE_PROJECT_REPONAME')
 
-      res = requests.get('http://www.example.com')
+      # secrets
+      circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
+      slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
 
-      print(res.content)
+      # params
+      threshold_seconds = os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
+      alert_threshold_user = os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER')
+      alert_threshold_build = os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS')
+
+      print(org)
+      print(repo)
+      print(circle_token)
+      print(threshold_seconds)
+      print(alert_threshold_user)
+      print(alert_threshold_build)
+      print(slack_app_url)
 
   main()
   # END PYTHON SCRIPT
@@ -41,12 +56,36 @@ jobs:
           name: Install python dependencies
           command: pip install requests
       - run:
-          name: Show env var
-          command: echo "${<< parameters.test-env >>}"
+          name: Run monitoring script
+          command: *python_script
       - run:
+          environment:
+            SLACK_MONITOR_PARAM_THRESHOLD_SECONDS: << parameters.alert-threshold-seconds >>
+            SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER: << parameters.alert-threshold-max-builds-per-user >>
+            SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS: << parameters.alert-threshold-max-builds-prev-minute >>
           name: Run monitor script
           command: *python_script
     parameters:
-      test-env:
+      circle-project-username:
         type: env_var_name
-        default: TEST_VAR
+        default: CIRCLE_PROJECT_USERNAME
+      circle-project-reponame:
+        type: env_var_name
+        default: CIRCLE_PROJECT_REPONAME
+      circle-token:
+        type: env_var_name
+        default: SLACK_MONITOR_CIRCLE_TOKEN
+      slack-app-url:
+        type: env_var_name
+        default: SLACK_MONITOR_SLACK_APP_URL
+      alert-threshold-seconds:
+        type: integer
+        default: 120
+      # max builds triggered by a single user within threshold_seconds of the current time
+      alert-threshold-max-builds-per-user:
+        type: integer
+        default: 5
+      # max within a minute of the latest build that triggers an alert, must be < 30
+      alert-threshold-max-builds-prev-minute:
+        type: integer
+        default: 5
