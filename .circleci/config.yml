@@ -12,12 +12,12 @@ jobs:
 
 workflows:
   test-orb:
-    triggers:
-      - schedule:
-          cron: 5,10,15,20,25,30,35,40,45,50,55 * * * *
-          filters:
-              branches:
-                only:
-                  - master
+    # triggers:
+    #   - schedule:
+    #       cron: 5,10,15,20,25,30,35,40,45,50,55 * * * *
+    #       filters:
+    #           branches:
+    #             only:
+    #               - master
     jobs:
       - build
