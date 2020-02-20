@@ -13,27 +13,13 @@ def make_request(endpoint, circle_token):
     req = urllib.request.Request(endpoint, headers=header)
     return json.loads(urllib.request.urlopen(req).read())
 
-
-def repos(circle_token):
-    repos_endpoint = f'https://circleci.com/api/v1.1/projects?circle-token={circle_token}'
-    repos_res = make_request(repos_endpoint, circle_token)
-    return [repo['reponame'] for repo in repos_res]
-
-
 def pipelines_res(project_slug, circle_token):
     pipelines_endpoint = f'https://circleci.com/api/v2/project/{project_slug}/pipeline'
     pipelines = make_request(pipelines_endpoint, circle_token)
     return pipelines['items']
 
 
-def k_pipeline_v_actor(pipelines):
-    return {
-        pipeline['id']: pipeline['trigger']['actor']['login']
-        for pipeline in pipelines
-    }
-
-
-def k_actor_v_pipelines(pipelines):
+def func_k_actor_v_pipelines(pipelines):
     res = {}
     for pipeline in pipelines:
         actor = pipeline['trigger']['actor']['login']
@@ -44,7 +30,7 @@ def k_actor_v_pipelines(pipelines):
     return res
 
 
-def k_actor_v_created_arr(pipelines):
+def func_k_actor_v_created_arr(pipelines):
     res = {}
     for pipeline in pipelines:
         actor = pipeline['trigger']['actor']['login']
@@ -55,7 +41,7 @@ def k_actor_v_created_arr(pipelines):
     return res
 
 
-def k_actor_v_pipeline_created_limit(k_actor_v_created_arr_dict, last_time, threshold_seconds):
+def func_k_actor_v_pipeline_created_limit(k_actor_v_created_arr_dict, last_time, threshold_seconds):
     # latest_time = datetime.fromisoformat(last_time)
     res = {}
     for actor, times in k_actor_v_created_arr_dict.items():
@@ -63,17 +49,7 @@ def k_actor_v_pipeline_created_limit(k_actor_v_created_arr_dict, last_time, thre
     return res
 
 
-def k_pipeline_v_workflows(pipelines, circle_token):
-    res = {}
-    for pipeline in pipelines:
-        pipeline_id = pipeline["id"]
-        pipeline_endpoint = f'https://circleci.com/api/v2/pipeline/{pipeline_id}/workflow'
-        pipeline = make_request(pipeline_endpoint, circle_token)
-        res[pipeline_id] = [workflow['id'] for workflow in pipeline['items']]
-    return res
-
-
-def errant_workflows(pipelines, circle_token):
+def func_errant_workflows(pipelines, circle_token):
     res = []
     for pipeline_id in pipelines:
         pipeline_endpoint = f'https://circleci.com/api/v2/pipeline/{pipeline_id}/workflow'
@@ -160,9 +136,9 @@ def main():
     current_time_str = datetime.now().isoformat()
     oldest_pipeline_date = pipelines[-1]["created_at"][:-1]
 
-    k_actor_v_created_arr = k_actor_v_created_arr(pipelines)
-    k_actor_v_pipelines = k_actor_v_pipelines(pipelines)
-    k_actor_v_pipeline_created_limit = k_actor_v_pipeline_created_limit(
+    k_actor_v_created_arr = func_k_actor_v_created_arr(pipelines)
+    k_actor_v_pipelines = func_k_actor_v_pipelines(pipelines)
+    k_actor_v_pipeline_created_limit = func_k_actor_v_pipeline_created_limit(
         k_actor_v_created_arr,
         current_time,
         threshold_seconds
@@ -197,7 +173,7 @@ def main():
             requests.post(slack_app_url, json=user_alert_msg)
 
             # identify and cancel workflows by this user
-            errant_workflows = errant_workflows(pipelines_by_errant_actor, circle_token)
+            errant_workflows = func_errant_workflows(pipelines_by_errant_actor, circle_token)
             for workflow_id in errant_workflows:
                 headers = {
                     'Content-Type': 'application/json',
