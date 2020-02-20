@@ -8,7 +8,7 @@ display:
 executors:
   default:
     docker:
-      - image: circleci/alpine
+      - image: circleci/node:lts
 
 commands:
   sayhellotomyfriend:

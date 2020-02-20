@@ -5,8 +5,7 @@ orbs:
 
 jobs:
   build:
-    docker:
-      - image: circleci/node:lts
+    executor: hello/default
     steps:
       - hello/sayhellotomyfriend:
           friend: Anna
