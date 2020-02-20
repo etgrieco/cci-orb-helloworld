@@ -138,17 +138,17 @@ def k_actor_v_cost(k_pipeline_v_actor_dict, k_pipeline_v_cost_dict):
 
 def main():
     vcs = 'gh'
-    CIRCLE_PROJECT_USERNAME = os.getenv('CIRCLE_PROJECT_USERNAME')
+    org = os.getenv('CIRCLE_PROJECT_USERNAME')
     repo = os.getenv('CIRCLE_PROJECT_REPONAME')
 
     # From parameters
-    circle_token = os.getenv('CIRCLE_SLACK_MONITOR_CIRCLE_TOKEN')
-    threshold_seconds = os.getenv('CIRCLE_SLACK_MONITOR_THRESHOLD_SECONDS')
+    circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
+    threshold_seconds = os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
     # max builds triggered by a single user within threshold_seconds of the current time
-    alert_threshold_user = os.getenv('CIRCLE_SLACK_MONITOR_THRESHOLD_MAX_BUILDS_PER_USER')
+    alert_threshold_user = os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER')
     # max within a minute of the latest build that triggers an alert, must be < 30
-    alert_threshold_build = os.getenv('CIRCLE_SLACK_MONITOR_THRESHOLD_MAX_BUILDS')
-    slack_app_url = os.getenv('CIRCLE_SLACK_MONITOR_SLACK_APP_URL')
+    alert_threshold_build = os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS')
+    slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
 
 
     user_alert = False
