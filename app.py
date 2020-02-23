@@ -126,14 +126,17 @@ def main():
     threshold_seconds = int(
         os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
     )
+    print('threshold seconds: ', threshold_seconds)
     # max builds triggered by a single user within threshold_seconds of the current time
     alert_threshold_user = int(
         os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER')
     )
+    print('alert_threshold_user ', alert_threshold_user)
     # max within a minute of the latest build that triggers an alert, must be < 30
     alert_threshold_build = int(
         os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS')
     )
+    print('alert_threshold_build ', alert_threshold_build)
 
     user_alert = False
     build_alert = False
