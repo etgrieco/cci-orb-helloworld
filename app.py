@@ -145,13 +145,16 @@ def main():
     oldest_pipeline_date = pipelines[-1]["created_at"][:-1]
 
     k_actor_v_created_arr = func_k_actor_v_created_arr(pipelines)
+    print(k_actor_v_created_arr)
     k_actor_v_pipelines = func_k_actor_v_pipelines(pipelines)
     k_actor_v_pipeline_created_limit = func_k_actor_v_pipeline_created_limit(
         k_actor_v_created_arr,
         current_time,
         threshold_seconds
     )
+
     print(k_actor_v_pipeline_created_limit)
+    
     for actor, pipeline_ids in k_actor_v_pipeline_created_limit.items():
         if len(pipeline_ids) > alert_threshold_user:
             user_alert = True
@@ -221,10 +224,11 @@ def main():
             ]
         }
         requests.post(slack_app_url, json=build_alert_msg)
-
-    print('************************************************************')
-    print(f'RUN ALERT -- {current_time_str}')
-    print('************************************************************')
+    print({
+            "user_alert": user_alert,
+            "build_alert": build_alert
+    })
+    
     return {
         "statusCode": 200,
         "body": json.dumps({

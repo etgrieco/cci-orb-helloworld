@@ -218,16 +218,10 @@ python_script: &python_script |
           }
           requests.post(slack_app_url, json=build_alert_msg)
 
-      print('************************************************************')
-      print(f'RUN ALERT -- {current_time_str}')
-      print('************************************************************')
-      return {
-          "statusCode": 200,
-          "body": json.dumps({
-              "user_alert": user_alert,
-              "build_alert": build_alert
-          }),
-      }
+      print({
+        "user_alert": user_alert,
+        "build_alert": build_alert
+      })
 
   main()
   # END PYTHON SCRIPT
