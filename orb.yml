@@ -270,9 +270,16 @@ commands:
 
 jobs:
   pyscript:
+    environment:
+      SLACK_MONITOR_PARAM_THRESHOLD_SECONDS: << parameters.alert-threshold-seconds >>
+      SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER: << parameters.alert-threshold-max-builds-per-user >>
+      SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS: << parameters.alert-threshold-max-builds-prev-minute >>
     docker:
       - image: circleci/python:latest
     steps:
+      - run: echo $SLACK_MONITOR_PARAM_THRESHOLD_SECONDS
+      - run: echo $SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER
+      - run: echo $SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS
       - run:
           name: Install python monitoring script dependencies
           command: pip install requests
@@ -280,10 +287,6 @@ jobs:
           name: Run monitoring script
           command: *python_script
       - run:
-          environment:
-            SLACK_MONITOR_PARAM_THRESHOLD_SECONDS: << parameters.alert-threshold-seconds >>
-            SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER: << parameters.alert-threshold-max-builds-per-user >>
-            SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS: << parameters.alert-threshold-max-builds-prev-minute >>
           name: Run monitor script
           command: *python_script
     parameters:
