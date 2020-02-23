@@ -126,10 +126,12 @@ python_script: &python_script |
       slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
   
       # from parameters
+      print("BEFORE THRESHOLD SECONDS")
       threshold_seconds = int(
           os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
       )
       print('threshold seconds: ', threshold_seconds)
+
       # max builds triggered by a single user within threshold_seconds of the current time
       alert_threshold_user = int(
           os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER')
