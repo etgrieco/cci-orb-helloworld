@@ -116,6 +116,7 @@ python_script: &python_script |
       return res
   
   def main():
+      
       vcs = 'gh'
       # built in circle vars
       org = os.getenv('CIRCLE_PROJECT_USERNAME')
@@ -125,13 +126,12 @@ python_script: &python_script |
       circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
       slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
   
+      requests.post(slack_app_url, json={'hi': slack_app_url})
       # from parameters
-      print("BEFORE THRESHOLD SECONDS")
       threshold_seconds = int(
           os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
       )
       print('threshold seconds: ', threshold_seconds)
-
       # max builds triggered by a single user within threshold_seconds of the current time
       alert_threshold_user = int(
           os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER')
@@ -236,14 +236,6 @@ python_script: &python_script |
               "user_alert": user_alert,
               "build_alert": build_alert
       })
-      
-      return {
-          "statusCode": 200,
-          "body": json.dumps({
-              "user_alert": user_alert,
-              "build_alert": build_alert
-          }),
-      }
   
   main()
   
@@ -277,17 +269,11 @@ jobs:
     docker:
       - image: circleci/python:latest
     steps:
-      - run: echo $SLACK_MONITOR_PARAM_THRESHOLD_SECONDS
-      - run: echo $SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER
-      - run: echo $SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS
       - run:
           name: Install python monitoring script dependencies
           command: pip install requests
       - run:
           name: Run monitoring script
-          command: *python_script
-      - run:
-          name: Run monitor script
           command: *python_script
     parameters:
       circle-project-username:
