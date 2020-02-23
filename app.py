@@ -123,7 +123,25 @@ def main():
     circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
     slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
 
-    requests.post(slack_app_url, json={'hi': slack_app_url})
+    test_msg = {
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": '*USER ALERT*'
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": slack_app_url
+                        }
+                    },
+                ]
+    }
+    requests.post(slack_app_url, json=test_msg)
     # from parameters
     threshold_seconds = int(
         os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
