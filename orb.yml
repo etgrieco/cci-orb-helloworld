@@ -111,12 +111,16 @@ python_script: &python_script |
       vcs = 'gh'
       # built in circle vars
       org = os.getenv('CIRCLE_PROJECT_USERNAME')
+      print('org ', org)
       repo = os.getenv('CIRCLE_PROJECT_REPONAME')
+      print('repo ', repo)
 
       # secrets
       circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
+      print('circle token ', circle_token)
       slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
-
+      print('slack app url ', slack_app_url)
+      
       # from parameters
       threshold_seconds = int(
           os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
