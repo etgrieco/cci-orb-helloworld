@@ -7,7 +7,7 @@ jobs:
     docker:
       - image: circleci/node
     steps:
-      - sleep 1000
+      - run: sleep 60
 
 workflows:
   orb-test:
