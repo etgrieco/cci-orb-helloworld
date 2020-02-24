@@ -113,15 +113,20 @@ def k_actor_v_cost(k_pipeline_v_actor_dict, k_pipeline_v_cost_dict):
     return res
 
 def main():
-    
     vcs = 'gh'
-    # built in circle vars or customized vars
-    org = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME')
-    repo = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME')
+
+    org_env_var = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME_ENVVAR')
+    repo_env_var = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME_ENVVAR')
+    circle_token_env_var = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN_ENVVAR')
+    slack_app_url_env_var = os.getenv('SLACK_MONITOR_SLACK_APP_URL_ENVVAR')
+
+    # circle project vars
+    org = os.getenv(org_env_var)
+    repo = os.getenv(repo_env_var)
 
     # secrets
-    circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
-    slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
+    circle_token = os.getenv(circle_token_env_var)
+    slack_app_url = os.getenv(slack_app_url_env_var)
 
     # from parameters
     threshold_seconds = int(

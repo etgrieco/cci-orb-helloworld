@@ -116,15 +116,20 @@ python_script: &python_script |
       return res
   
   def main():
-      
       vcs = 'gh'
-      # built in circle vars or customized vars
-      org = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME')
-      repo = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME')
+  
+      org_env_var = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME_ENVVAR')
+      repo_env_var = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME_ENVVAR')
+      circle_token_env_var = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN_ENVVAR')
+      slack_app_url_env_var = os.getenv('SLACK_MONITOR_SLACK_APP_URL_ENVVAR')
+  
+      # circle project vars
+      org = os.getenv(org_env_var)
+      repo = os.getenv(repo_env_var)
   
       # secrets
-      circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
-      slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
+      circle_token = os.getenv(circle_token_env_var)
+      slack_app_url = os.getenv(slack_app_url_env_var)
   
       # from parameters
       threshold_seconds = int(
@@ -236,7 +241,7 @@ python_script: &python_script |
               "build_alert": build_alert
       })
   
-  main()  
+  main()
   
   # END PYTHON SCRIPT
   EOF
@@ -251,6 +256,11 @@ display:
 jobs:
   pyscript:
     environment:
+      # map environment variables
+      SLACK_MONITOR_CIRCLE_PROJECT_USERNAME_ENVVAR: << parameters.circle-project-username-envvar >>
+      SLACK_MONITOR_CIRCLE_PROJECT_REPONAME_ENVVAR: << parameters.circle-project-reponame-envvar >>
+      SLACK_MONITOR_CIRCLE_TOKEN_ENVVAR: << parameters.circle-token-envvar >>
+      SLACK_MONITOR_SLACK_APP_URL_ENVVAR: << parameters.slack-app-url-envvar >>
       SLACK_MONITOR_PARAM_THRESHOLD_SECONDS: << parameters.alert-threshold-seconds >>
       SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER: << parameters.alert-threshold-max-builds-per-user >>
       SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS: << parameters.alert-threshold-max-builds-prev-minute >>
