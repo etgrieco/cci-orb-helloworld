@@ -61,57 +61,6 @@ def func_errant_workflows(pipelines, circle_token):
 def flatten(l):
     return [item for sublist in l for item in sublist]
 
-
-def k_workflow_v_cost(k_pipeline_v_workflows_dict, project_slug, circle_token):
-    res = {}
-    k_workflow_name_v_details = {}
-
-    workflows = flatten(k_pipeline_v_workflows_dict.values())
-    for workflow_id in workflows:
-        workflow_endpoint = f'https://circleci.com/api/v2/workflow/{workflow_id}'
-        workflow = make_request(workflow_endpoint, circle_token)
-        workflow_name = workflow['name']
-        if workflow_name == 'Build Error':
-            continue
-
-        if workflow_name in k_workflow_name_v_details:
-            workflows_insight = k_workflow_name_v_details[workflow_name]
-        else:
-            workflow_insight_endpoint = f'https://circleci.com/api/v2/insights/{project_slug}/workflows/{workflow_name}'
-            workflows_insight = make_request(workflow_insight_endpoint, circle_token)
-            k_workflow_name_v_details[workflow_name] = workflows_insight
-
-        workflow_insight = [workflow for workflow in workflows_insight['items'] if workflow['id'] == workflow_id]
-        if len(workflow_insight):
-            workflow_credits = workflow_insight[0]['credits_used']
-            workflow_cost = workflow_credits * 0.0006
-            res[workflow_id] = workflow_cost
-        break
-    return res
-
-
-def k_pipeline_v_cost(k_pipeline_v_workflows_dict, k_workflow_v_cost_dict):
-    res = {}
-    for pipeline, workflows in k_pipeline_v_workflows_dict.items():
-        cost = 0
-        for workflow in workflows:
-            if workflow in k_workflow_v_cost_dict:
-                cost += k_workflow_v_cost_dict[workflow]
-        if cost > 0:
-            res[pipeline] = cost
-    return res
-
-
-def k_actor_v_cost(k_pipeline_v_actor_dict, k_pipeline_v_cost_dict):
-    res = {}
-    for pipeline, actor in k_pipeline_v_actor_dict.items():
-        if pipeline not in k_pipeline_v_cost_dict:
-            continue
-        if actor not in res:
-            res[actor] = 0
-        res[actor] += k_pipeline_v_cost_dict[pipeline]
-    return res
-
 def main():
     vcs = 'gh'
 
