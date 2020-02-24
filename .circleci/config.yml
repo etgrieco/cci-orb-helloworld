@@ -3,6 +3,8 @@ orbs:
   hello: etgrieco/hello-world@dev:0.0.1
 
 jobs:
+  docker:
+    - image: circleci/node
   sleep:
     steps:
       - sleep 1000
@@ -10,14 +12,5 @@ jobs:
 workflows:
   orb-test:
     jobs:
+      - sleep
       - hello/pyscript
-          # circle-project-username-envvar: SLACK_MONITOR_CIRCLE_PROJECT_USERNAME
-          # circle-project-reponame-envvar: SLACK_MONITOR_CIRCLE_PROJECT_REPONAME
-
-    # triggers:
-    #   - schedule:
-    #       cron: "* * * * *"
-    #       filters:
-    #           branches:
-    #             only:
-    #               - master
