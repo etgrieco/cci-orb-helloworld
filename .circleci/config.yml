@@ -3,9 +3,9 @@ orbs:
   hello: etgrieco/hello-world@dev:0.0.1
 
 jobs:
-  docker:
-    - image: circleci/node
   sleep:
+    docker:
+      - image: circleci/node
     steps:
       - sleep 1000
 
