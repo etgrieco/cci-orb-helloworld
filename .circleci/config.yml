@@ -10,10 +10,10 @@ workflows:
             circle-project-username-envvar: SLACK_MONITOR_CIRCLE_PROJECT_USERNAME
             circle-project-reponame-envvar: SLACK_MONITOR_CIRCLE_PROJECT_REPONAME
 
-    triggers:
-      - schedule:
-          cron: "* * * * *"
-          filters:
-              branches:
-                only:
-                  - master
+    # triggers:
+    #   - schedule:
+    #       cron: "* * * * *"
+    #       filters:
+    #           branches:
+    #             only:
+    #               - master
