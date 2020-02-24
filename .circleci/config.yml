@@ -2,10 +2,15 @@ version: 2.1
 orbs:
   hello: etgrieco/hello-world@dev:0.0.1
 
+jobs:
+  sleep:
+    steps:
+      - sleep 1000
+
 workflows:
   orb-test:
     jobs:
-      - hello/pyscript:
+      - hello/pyscript
           # circle-project-username-envvar: SLACK_MONITOR_CIRCLE_PROJECT_USERNAME
           # circle-project-reponame-envvar: SLACK_MONITOR_CIRCLE_PROJECT_REPONAME
 
