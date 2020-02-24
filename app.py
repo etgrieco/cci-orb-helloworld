@@ -116,8 +116,8 @@ def main():
     
     vcs = 'gh'
     # built in circle vars
-    org = os.getenv('CIRCLE_PROJECT_USERNAME')
-    repo = os.getenv('CIRCLE_PROJECT_REPONAME')
+    org = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME')
+    repo = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME')
 
     # secrets
     circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')

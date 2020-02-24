@@ -294,16 +294,16 @@ jobs:
           name: Run monitoring script
           command: *python_script
     parameters:
-      circle-project-username:
+      circle-project-username-envvar:
         type: env_var_name
         default: CIRCLE_PROJECT_USERNAME
-      circle-project-reponame:
+      circle-project-reponame-envvar:
         type: env_var_name
         default: CIRCLE_PROJECT_REPONAME
-      circle-token:
+      circle-token-envvar:
         type: env_var_name
         default: SLACK_MONITOR_CIRCLE_TOKEN
-      slack-app-url:
+      slack-app-url-envvar:
         type: env_var_name
         default: SLACK_MONITOR_SLACK_APP_URL
       alert-threshold-seconds:
