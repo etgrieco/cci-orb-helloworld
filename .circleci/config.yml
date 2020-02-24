@@ -6,9 +6,9 @@ workflows:
   orb-test:
     jobs:
       - hello/pyscript:
-          parameters:
-            circle-project-username-envvar: SLACK_MONITOR_CIRCLE_PROJECT_USERNAME
-            circle-project-reponame-envvar: SLACK_MONITOR_CIRCLE_PROJECT_REPONAME
+          # parameters:
+          #   circle-project-username-envvar: SLACK_MONITOR_CIRCLE_PROJECT_USERNAME
+          #   circle-project-reponame-envvar: SLACK_MONITOR_CIRCLE_PROJECT_REPONAME
 
     # triggers:
     #   - schedule:
