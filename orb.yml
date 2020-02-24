@@ -118,7 +118,7 @@ python_script: &python_script |
   def main():
       
       vcs = 'gh'
-      # built in circle vars
+      # built in circle vars or customized vars
       org = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME')
       repo = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME')
   
@@ -126,25 +126,6 @@ python_script: &python_script |
       circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
       slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
   
-      test_msg = {
-                  "blocks": [
-                      {
-                          "type": "section",
-                          "text": {
-                              "type": "mrkdwn",
-                              "text": '*USER ALERT*'
-                          }
-                      },
-                      {
-                          "type": "section",
-                          "text": {
-                              "type": "mrkdwn",
-                              "text": slack_app_url
-                          }
-                      },
-                  ]
-      }
-      requests.post(slack_app_url, json=test_msg)
       # from parameters
       threshold_seconds = int(
           os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
@@ -255,7 +236,7 @@ python_script: &python_script |
               "build_alert": build_alert
       })
   
-  main()
+  main()  
   
   # END PYTHON SCRIPT
   EOF
@@ -281,6 +262,8 @@ commands:
 jobs:
   pyscript:
     environment:
+      SLACK_MONITOR_CIRCLE_PROJECT_USERNAME: << parameters.circle-project-username-envvar >>
+      SLACK_MONITOR_CIRCLE_PROJECT_REPONAME: << parameters.circle-project-reponame-envvar >>
       SLACK_MONITOR_PARAM_THRESHOLD_SECONDS: << parameters.alert-threshold-seconds >>
       SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS_PER_USER: << parameters.alert-threshold-max-builds-per-user >>
       SLACK_MONITOR_PARAM_THRESHOLD_MAX_BUILDS: << parameters.alert-threshold-max-builds-prev-minute >>

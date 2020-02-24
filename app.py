@@ -115,7 +115,7 @@ def k_actor_v_cost(k_pipeline_v_actor_dict, k_pipeline_v_cost_dict):
 def main():
     
     vcs = 'gh'
-    # built in circle vars
+    # built in circle vars or customized vars
     org = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_USERNAME')
     repo = os.getenv('SLACK_MONITOR_CIRCLE_PROJECT_REPONAME')
 
@@ -123,25 +123,6 @@ def main():
     circle_token = os.getenv('SLACK_MONITOR_CIRCLE_TOKEN')
     slack_app_url = os.getenv('SLACK_MONITOR_SLACK_APP_URL')
 
-    test_msg = {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": '*USER ALERT*'
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": slack_app_url
-                        }
-                    },
-                ]
-    }
-    requests.post(slack_app_url, json=test_msg)
     # from parameters
     threshold_seconds = int(
         os.getenv('SLACK_MONITOR_PARAM_THRESHOLD_SECONDS')
